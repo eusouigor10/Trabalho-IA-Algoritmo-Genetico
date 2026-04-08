@@ -1,0 +1,1 @@
+# Arquivo contendo a biblioteca de graficos e seus metodos
