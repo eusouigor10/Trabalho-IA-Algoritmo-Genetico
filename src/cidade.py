@@ -6,7 +6,6 @@ class Cidade:
         self.x = x
         self.y = y
         self.fitness = 0
-        self.distancias = {}
 
     def calcular_distancia(self, outra_cidade):
         return ((self.x - outra_cidade.x) ** 2 + (self.y - outra_cidade.y) ** 2) ** 0.5

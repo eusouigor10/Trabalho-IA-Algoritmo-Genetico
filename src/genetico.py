@@ -8,6 +8,9 @@ def selecao_roleta(populacao):
     # Realiza a selecao por roleta
     return None
 
+def escolha_operacao():
+    return None
+
 def crossover(individuo1, individuo2):
     # Realiza o crossover entre dois individuos
     return None
@@ -22,4 +25,7 @@ def mutacao(individuo):
 
 def criterio_parada(populacao):
     # Verifica se o criterio de parada foi atingido
+    return None
+
+def substituicao_geracao():
     return None
