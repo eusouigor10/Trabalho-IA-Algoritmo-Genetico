@@ -1,14 +1,11 @@
 # Arquivo da entidade da classe Cidade, que possuira id, fitness, coordenadas x e y, e um dicionario de distancias para as outras cidades
 
 class Cidade:
-    def __init__(self, id, x, y, dist):
+    def __init__(self, id, x, y):
         self.id = id
         self.x = x
         self.y = y
-        self.dist = dist
-
-    def calcular_distancia(self, outra_cidade):
-        return ((self.x - outra_cidade.x) ** 2 + (self.y - outra_cidade.y) ** 2) ** 0.5
-
-    def __repr__(self):
-        return f"Cidade(id={self.id}, x={self.x}, y={self.y})"
+        self.lista_adjacencias = []
+    
+    def preencher_lista(self, linhas):
+            self.lista_adjacencias = [0.0] * linhas
