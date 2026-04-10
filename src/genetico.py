@@ -2,7 +2,12 @@
 
 def calcula_fitness(individuo):
     # Calcula a fitness do individuo
-    return None
+
+    fitness = 1 / individuo.distancia_total
+
+    individuo.fitness = fitness
+
+    return fitness
 
 def selecao_roleta(populacao):
     # Realiza a selecao por roleta
