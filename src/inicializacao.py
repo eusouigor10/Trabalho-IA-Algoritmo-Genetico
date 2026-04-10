@@ -1,6 +1,7 @@
 # Arquivo responsavel por inicializar o cenario, calcular distancias, e criar a populacao inicial
 
 from cidade import Cidade
+from caminho import Caminho
 import random
 
 class Inicializacao:
@@ -10,6 +11,8 @@ class Inicializacao:
         self.cidade_inicial = None
         self.matriz_adjacencias = []
         self.linhas = 0
+        self.cidade_aleatoria = None
+        self.lista_caminhos = []
 
     # criar o grafo  
     def criacao_grafo(self):
@@ -48,11 +51,27 @@ class Inicializacao:
                 if cidade != adjacente:
                     cidade.lista_adjacencias[adjacente.id] = self.calculo_distancia(cidade, adjacente)
             self.matriz_adjacencias[cidade.id] = cidade.lista_adjacencias
-
-
     
-
-
-
-
     # criação dos caminhos iniciais
+    def criacao_caminhos_iniciais(self):
+        for _ in range(100):
+            novo_caminho = Caminho()
+            novo_caminho.preenchimento_caminho(len(self.cidades))
+            self.sorteio_ponto_inicial()
+            novo_caminho.cidades[0] = self.cidade_inicial
+            novo_caminho.cidades[len(self.cidades)] = self.cidade_inicial
+
+            cidades_meio = []
+            for i in range(len(self.cidades)):
+                if self.cidades[i] != self.cidade_inicial:
+                    cidades_meio.append(self.cidades[i])
+            random.shuffle(cidades_meio)
+
+            cidades_meio = [self.cidade_inicial] + cidades_meio
+            cidades_meio.append(self.cidade_inicial)
+
+            for i in range(len(self.cidades) + 1):
+                novo_caminho.cidades[i] = cidades_meio[i]
+
+            self.lista_caminhos.append(novo_caminho)
+        
