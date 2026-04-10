@@ -1,0 +1,11 @@
+from src.enum.operacao import Operacao
+
+PROB_CROSSOVER = 0.8
+PROB_MUTACAO = 0.05
+PROB_REPRODUCAO = 0.15
+
+OP_PROB = {
+    Operacao.CROSSOVER: PROB_CROSSOVER,
+    Operacao.MUTACAO: PROB_MUTACAO,
+    Operacao.REPRODUCAO: PROB_REPRODUCAO,
+}
