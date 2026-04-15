@@ -71,13 +71,31 @@ def crossover(individuo1, individuo2):
 
 
 def reproducao(individuo):
-    # Realiza a reproducao da populacao
-    return None
+    # Realiza a reproducao do individuo
+    novoIndividuo = Caminho()
+    novoIndividuo.cidades = individuo.cidades
+    # TODO Calcular a distancia total do novo individuo
+    # TODO Calcular a fitness do novo individuo
+
+    return novoIndividuo
 
 
 def mutacao(individuo):    
     # Realiza a mutacao do individuo
-    return None
+    i, j = random.sample(range(len(individuo.cidades)), 2)
+
+    backup = individuo.cidades[i]
+
+    individuo.cidades[i] = individuo.cidades[j]
+    
+    individuo.cidades[j] = backup
+
+    novoIndividuo = Caminho()
+    novoIndividuo.cidades = individuo.cidades
+    # TODO Calcular a distancia total do novo individuo
+    # TODO Calcular a fitness do novo individuo
+
+    return novoIndividuo
 
 
 def criterio_parada(populacao):
