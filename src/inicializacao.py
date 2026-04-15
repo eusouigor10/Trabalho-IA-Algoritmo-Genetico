@@ -54,7 +54,7 @@ class Inicializacao:
     
     # criação dos caminhos iniciais
     def criacao_caminhos_iniciais(self):
-        for _ in range(100): #paara 100 caminhos, instancia o caminho e coloca a cidade inicial no cmeço e no fim dele
+        for _ in range(100): #para 100 caminhos, instancia o caminho e coloca a cidade inicial no começo e no fim dele
             novo_caminho = Caminho()
             novo_caminho.preenchimento_caminho(len(self.cidades))
             self.sorteio_ponto_inicial()
@@ -72,6 +72,16 @@ class Inicializacao:
 
             for i in range(len(self.cidades) + 1):
                 novo_caminho.cidades[i] = cidades_meio[i] #coloca o caminho embaralhado no novo caminho
+            
+            novo_caminho.distancia_total = self.calculo_distancia_total_caminho(novo_caminho)
 
             self.lista_caminhos.append(novo_caminho) #coloca o novo caminho na lista de caminhos
+
+    def calculo_distancia_total_caminho(self, caminho):
+        distancia_total = 0
+
+        for i in range(len(caminho.cidades) - 1):
+            distancia_total = distancia_total + self.matriz_adjacencias[caminho.cidades[i].id][caminho.cidades[i + 1].id]
+
+        return distancia_total
         
