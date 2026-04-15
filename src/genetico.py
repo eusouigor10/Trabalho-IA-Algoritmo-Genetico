@@ -33,6 +33,14 @@ def selecao_roleta(populacao):
     # Realiza a selecao por roleta
     return None
 
+def criarIndividuo(individuo):
+    novoIndividuo = Caminho()
+    novoIndividuo.cidades = individuo
+    # TODO: Calcular a distancia total do novo individuo
+    # TODO: Calcular a fitness do novo individuo
+
+    return novoIndividuo
+    
 
 def crossover(individuo1, individuo2):
     # Realiza o crossover entre dois individuos
@@ -62,22 +70,15 @@ def crossover(individuo1, individuo2):
         filho[i] = individuo2.cidades[j]
         j += 1
 
-    novoIndividuo = Caminho()
-    novoIndividuo.cidades = filho
-    # TODO: Calcular a distancia total do novo individuo
-    # TODO: Calcular a fitness do novo individuo
+    novoIndividuo = criarIndividuo(filho)
 
     return novoIndividuo
 
 
 def reproducao(individuo):
     # Realiza a reproducao do individuo
-    novoIndividuo = Caminho()
-    novoIndividuo.cidades = individuo.cidades
-    # TODO Calcular a distancia total do novo individuo
-    # TODO Calcular a fitness do novo individuo
 
-    return novoIndividuo
+    return criarIndividuo(individuo.cidades)
 
 
 def mutacao(individuo):    
@@ -90,10 +91,7 @@ def mutacao(individuo):
     
     individuo.cidades[j] = backup
 
-    novoIndividuo = Caminho()
-    novoIndividuo.cidades = individuo.cidades
-    # TODO Calcular a distancia total do novo individuo
-    # TODO Calcular a fitness do novo individuo
+    novoIndividuo = criarIndividuo(individuo.cidades)
 
     return novoIndividuo
 
