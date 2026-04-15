@@ -3,6 +3,7 @@
 import random
 from src.enum.operacao import Operacao
 from src.const.probabilidades import OP_PROB
+from src.caminho import Caminho
 
 
 def calcula_fitness(individuo):
@@ -35,7 +36,38 @@ def selecao_roleta(populacao):
 
 def crossover(individuo1, individuo2):
     # Realiza o crossover entre dois individuos
-    return None
+    # A B C D | E F G H | I J K L M N - 14 / 3 = 4.66 -> 4
+
+    if(len(individuo1.cidades) != len(individuo2.cidades)):
+        raise ValueError("Os individuos devem ter o mesmo numero de cidades")
+
+    filho = [None] * len(individuo1.cidades)
+
+    corte = len(individuo1.cidades) // 3
+
+    # Copia a parte central do individuo 1 para o filho
+    for i in range(corte, 2 * corte):
+        filho[i] = individuo1.cidades[i]
+
+    # Preenche o restante do filho com cidades do individuo 2
+    j = 0
+
+    for i in range(len(filho)):
+        if corte <= i < 2 * corte:
+            continue
+
+        while individuo2.cidades[j] in filho:
+            j += 1
+
+        filho[i] = individuo2.cidades[j]
+        j += 1
+
+    novoIndividuo = Caminho()
+    novoIndividuo.cidades = filho
+    # TODO: Calcular a distancia total do novo individuo
+    # TODO: Calcular a fitness do novo individuo
+
+    return novoIndividuo
 
 
 def reproducao(individuo):
