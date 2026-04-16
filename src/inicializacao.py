@@ -1,7 +1,6 @@
-# Arquivo responsavel por inicializar o cenario, calcular distancias, e criar a populacao inicial
 
-from cidade import Cidade
-from caminho import Caminho
+from src.cidade import Cidade
+from src.caminho import Caminho
 import random
 
 class Inicializacao:
@@ -16,7 +15,7 @@ class Inicializacao:
 
     # criar o grafo  
     def criacao_grafo(self):
-        with open('cenario1.txt', 'r', encoding='utf-8') as arquivo:
+        with open('src/cenario1.txt', 'r', encoding='utf-8') as arquivo:
             while True:
                 linha = arquivo.readline() # lê linha por linha
 
@@ -43,7 +42,7 @@ class Inicializacao:
     # criação da matriz de adjacências que representa o grafo
     def criacao_matriz_grafo(self):
         self.linhas = len(self.cidades)
-        self.matriz_adjacencias = [[0.0 for _ in range(self.linhas)] for _ in range(self.linhas)] #cria uma matriz quadrada com o tamanho da lista de cidades
+        self.matriz_adjacencias = [[0.0 for _ in range(self.linhas + 1)] for _ in range(self.linhas + 1)] #cria uma matriz quadrada com o tamanho da lista de cidades
 
         for cidade in self.cidades:
             cidade.preencher_lista(self.linhas) #preenche a lista de adjacências de cada cidade

@@ -1,4 +1,4 @@
-from cidade import Cidade
+from src.cidade import Cidade
 
 class Caminho:
     def __init__(self):

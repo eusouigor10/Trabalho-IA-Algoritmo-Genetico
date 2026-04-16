@@ -8,4 +8,4 @@ class Cidade:
         self.lista_adjacencias = []
     
     def preencher_lista(self, linhas):
-            self.lista_adjacencias = [0.0] * linhas
+            self.lista_adjacencias = [0.0] * (linhas + 1)
