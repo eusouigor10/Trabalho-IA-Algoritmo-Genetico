@@ -109,9 +109,40 @@ def mutacao(individuo):
     return novoIndividuo
 
 
-def criterio_parada(populacao):
+# * @param população: vetor de caminhos
+# * @param melhor_individuo_passado: melhor caminho da geração passada
+# * @param count_geracoes_sem_melhora: contador de gerações sem melhora
+def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melhora):
     # Verifica se o criterio de parada foi atingido
-    return None
+
+    # Limite de gerações sem melhora
+    limite = 50 # ? Alterar este valor?
+
+    # Tolerância para considerar que houve melhora
+    tolerancia = 0.05 # ? Alterar este valor?
+
+    melhor_individuo_atual = min(individuo.distancia_total for individuo in populacao)
+
+    # Primeira geração
+    if melhor_individuo_passado is None:
+        return False, melhor_individuo_atual, 0
+    
+    melhora = (melhor_individuo_passado - melhor_individuo_atual) / melhor_individuo_passado
+
+    if melhora < tolerancia:
+        count_geracoes_sem_melhora += 1
+    else:
+        count_geracoes_sem_melhora = 0
+
+    parar = count_geracoes_sem_melhora >= limite
+
+    '''
+        Retorno:
+        - parar: booleano indicando se o critério de parada foi atingido
+        - melhor_individuo_atual: melhor caminho da geração atual
+        - count_geracoes_sem_melhora: contador atualizado de gerações sem melhora
+    '''
+    return parar, melhor_individuo_atual, count_geracoes_sem_melhora
 
 
 def substituicao_geracao():
