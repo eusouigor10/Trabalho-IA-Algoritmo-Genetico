@@ -13,6 +13,11 @@ class Inicializacao:
         self.cidade_aleatoria = None
         self.lista_caminhos = []
 
+    def parte_1(self):
+        self.criacao_grafo()
+        self.criacao_matriz_grafo()
+        self.criacao_caminhos_iniciais()
+
     # criar o grafo  
     def criacao_grafo(self):
         with open('src/cenario1.txt', 'r', encoding='utf-8') as arquivo:
@@ -53,28 +58,26 @@ class Inicializacao:
     
     # criação dos caminhos iniciais
     def criacao_caminhos_iniciais(self):
-        for _ in range(100): #para 100 caminhos, instancia o caminho e coloca a cidade inicial no começo e no fim dele
+        self.sorteio_ponto_inicial()
+        for _ in range(100):
             novo_caminho = Caminho()
-            novo_caminho.preenchimento_caminho(len(self.cidades))
-            self.sorteio_ponto_inicial()
-            novo_caminho.cidades[0] = self.cidade_inicial
-            novo_caminho.cidades[len(self.cidades)] = self.cidade_inicial
-
-            cidades_meio = []
-            for i in range(len(self.cidades)): #pega as cidades do meio e embaralha elas, excluindo a cidade inicial e final
-                if self.cidades[i] != self.cidade_inicial:
-                    cidades_meio.append(self.cidades[i])
+        
+            # filtra todas as cidades que não são a inicial
+            cidades_meio = [c for c in self.cidades if c.id != self.cidade_inicial.id]
+        
+            # embaralha apenas o meio do caminho
             random.shuffle(cidades_meio)
 
-            cidades_meio = [self.cidade_inicial] + cidades_meio
-            cidades_meio.append(self.cidade_inicial) #coloca a cidade inicial no começo e no fim do novo caminho embaralhado
-
-            for i in range(len(self.cidades) + 1):
-                novo_caminho.cidades[i] = cidades_meio[i] #coloca o caminho embaralhado no novo caminho
-            
+            # monta a rota completa: início + meio + retorno ao Início
+            rota_final = [self.cidade_inicial] + cidades_meio + [self.cidade_inicial]
+        
+            # atribui a lista
+            novo_caminho.cidades = rota_final
+        
+            # calcula a distância total
             novo_caminho.distancia_total = self.calculo_distancia_total_caminho(novo_caminho)
 
-            self.lista_caminhos.append(novo_caminho) #coloca o novo caminho na lista de caminhos
+            self.lista_caminhos.append(novo_caminho)
 
     def calculo_distancia_total_caminho(self, caminho):
         distancia_total = 0
