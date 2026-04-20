@@ -53,7 +53,7 @@ def criarIndividuo(individuo):
     novoIndividuo.cidades = individuo
 
     Inicializacao.calculo_distancia_total_caminho(novoIndividuo)
-    
+
     calcula_fitness(novoIndividuo)
 
     return novoIndividuo
@@ -148,6 +148,6 @@ def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melh
     '''
     return parar, melhor_individuo_atual, count_geracoes_sem_melhora
 
-
+# ! Talvez este método não será necessário
 def substituicao_geracao():
     return None
