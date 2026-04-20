@@ -2,6 +2,12 @@
 
 import src.genetico
 
+# Variáveis globais para controle do algoritmo
+melhor_individuo_atual = None
+count_geracoes_sem_melhora = 0
+historico_melhores_individuos = []
+parada = False
+
 if __name__ == "__main__":
     print("Iniciando o algoritmo genético...")
 
