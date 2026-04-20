@@ -31,6 +31,19 @@ def escolha_operacao():
 
 def selecao_roleta(populacao):
     # Realiza a selecao por roleta
+
+    fitness_total = sum(individuo.fitness for individuo in populacao)
+
+    num_aleatorio = random.uniform(0, fitness_total)
+
+    acumulado = 0
+
+    for individuo in populacao:
+        acumulado += individuo.fitness
+
+        if acumulado >= num_aleatorio:
+            return individuo
+
     return None
 
 def criarIndividuo(individuo):
