@@ -4,6 +4,7 @@ import random
 from src.enum.operacao import Operacao
 from src.const.probabilidades import OP_PROB
 from src.caminho import Caminho
+from src.inicializacao import Inicializacao
 
 
 def calcula_fitness(individuo):
@@ -48,9 +49,12 @@ def selecao_roleta(populacao):
 
 def criarIndividuo(individuo):
     novoIndividuo = Caminho()
+
     novoIndividuo.cidades = individuo
-    # TODO: Calcular a distancia total do novo individuo
-    # TODO: Calcular a fitness do novo individuo
+
+    Inicializacao.calculo_distancia_total_caminho(novoIndividuo)
+    
+    calcula_fitness(novoIndividuo)
 
     return novoIndividuo
     
