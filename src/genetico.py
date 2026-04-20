@@ -4,6 +4,7 @@ import random
 from src.enum.operacao import Operacao
 from src.const.probabilidades import OP_PROB
 from src.caminho import Caminho
+from src.inicializacao import Inicializacao
 
 
 def calcula_fitness(individuo):
@@ -31,13 +32,29 @@ def escolha_operacao():
 
 def selecao_roleta(populacao):
     # Realiza a selecao por roleta
+
+    fitness_total = sum(individuo.fitness for individuo in populacao)
+
+    num_aleatorio = random.uniform(0, fitness_total)
+
+    acumulado = 0
+
+    for individuo in populacao:
+        acumulado += individuo.fitness
+
+        if acumulado >= num_aleatorio:
+            return individuo
+
     return None
 
 def criarIndividuo(individuo):
     novoIndividuo = Caminho()
+
     novoIndividuo.cidades = individuo
-    # TODO: Calcular a distancia total do novo individuo
-    # TODO: Calcular a fitness do novo individuo
+
+    Inicializacao.calculo_distancia_total_caminho(novoIndividuo)
+
+    calcula_fitness(novoIndividuo)
 
     return novoIndividuo
     
@@ -96,10 +113,41 @@ def mutacao(individuo):
     return novoIndividuo
 
 
-def criterio_parada(populacao):
+# * @param população: vetor de caminhos
+# * @param melhor_individuo_passado: melhor caminho da geração passada
+# * @param count_geracoes_sem_melhora: contador de gerações sem melhora
+def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melhora):
     # Verifica se o criterio de parada foi atingido
-    return None
 
+    # Limite de gerações sem melhora
+    limite = 50 # ? Alterar este valor?
 
+    # Tolerância para considerar que houve melhora
+    tolerancia = 0.05 # ? Alterar este valor?
+
+    melhor_individuo_atual = min(individuo.distancia_total for individuo in populacao)
+
+    # Primeira geração
+    if melhor_individuo_passado is None:
+        return False, melhor_individuo_atual, 0
+    
+    melhora = (melhor_individuo_passado - melhor_individuo_atual) / melhor_individuo_passado
+
+    if melhora < tolerancia:
+        count_geracoes_sem_melhora += 1
+    else:
+        count_geracoes_sem_melhora = 0
+
+    parar = count_geracoes_sem_melhora >= limite
+
+    '''
+        Retorno:
+        - parar: booleano indicando se o critério de parada foi atingido
+        - melhor_individuo_atual: melhor caminho da geração atual
+        - count_geracoes_sem_melhora: contador atualizado de gerações sem melhora
+    '''
+    return parar, melhor_individuo_atual, count_geracoes_sem_melhora
+
+# ! Talvez este método não será necessário
 def substituicao_geracao():
     return None
