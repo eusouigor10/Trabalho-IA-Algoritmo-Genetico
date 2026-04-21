@@ -45,7 +45,6 @@ def selecao_roleta(populacao):
         if acumulado >= num_aleatorio:
             return individuo
 
-    return None
 
 def criarIndividuo(individuo):
     novoIndividuo = Caminho()

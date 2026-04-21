@@ -9,16 +9,37 @@ count_geracoes_sem_melhora = 0
 historico_melhores_individuos = []
 parada = False
 inicializacao = Inicializacao()
+lista_caminhos = inicializacao.lista_caminhos
+nova_lista_caminhos = [None] * len(lista_caminhos)
 
 if __name__ == "__main__":
     print("Iniciando o algoritmo genético...")
 
-#inicialização com a criação da população inicial, caminhos iniciais e distâncias
+# inicialização com a criação da população inicial, caminhos iniciais e distâncias
 inicializacao.parte_1()
 
-#cálculo da fitness de cada caminho
+# cálculo da fitness de cada caminho
+for caminho in inicializacao.lista_caminhos:
+    src.genetico.calcula_fitness(caminho)
 
-#seleção e envio para crossover, mutação ou reprodução
+contador_posicao = 0
+# seleção e envio para crossover, mutação ou reprodução
+while len(nova_lista_caminhos) < 100:
+    operacao = src.genetico.escolha_operacao()
+    if operacao == "Crossover":
+        individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
+        individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
+        nova_lista_caminhos[contador_posicao] =  src.genetico.crossover(individuo_1, individuo_2)
+        contador_posicao += 1
+    elif operacao == "Reprodução":
+        individuo = src.genetico.selecao_roleta(lista_caminhos)
+        nova_lista_caminhos[contador_posicao] = src.genetico.reproducao(individuo)
+        contador_posicao += 1
+    elif operacao == "Mutação":
+        individuo = src.genetico.selecao_roleta(lista_caminhos)
+        nova_lista_caminhos[contador_posicao] = src.genetico.mutacao(individuo)
+        contador_posicao += 1
+
 
 #estabelecimento da nova população
 
