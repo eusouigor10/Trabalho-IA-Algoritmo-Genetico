@@ -15,32 +15,32 @@ nova_lista_caminhos = [None] * len(lista_caminhos)
 if __name__ == "__main__":
     print("Iniciando o algoritmo genético...")
 
-# inicialização com a criação da população inicial, caminhos iniciais e distâncias
-inicializacao.parte_1()
+    # inicialização com a criação da população inicial, caminhos iniciais e distâncias
+    inicializacao.parte_1()
 
-# cálculo da fitness de cada caminho
-for caminho in inicializacao.lista_caminhos:
-    src.genetico.calcula_fitness(caminho)
+    # cálculo da fitness de cada caminho
+    for caminho in inicializacao.lista_caminhos:
+        src.genetico.calcula_fitness(caminho)
 
-contador_posicao = 0
-# seleção e envio para crossover, mutação ou reprodução
-while len(nova_lista_caminhos) < 100:
-    operacao = src.genetico.escolha_operacao()
-    if operacao == "Crossover":
-        individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
-        individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
-        nova_lista_caminhos[contador_posicao] =  src.genetico.crossover(individuo_1, individuo_2)
-        contador_posicao += 1
-    elif operacao == "Reprodução":
-        individuo = src.genetico.selecao_roleta(lista_caminhos)
-        nova_lista_caminhos[contador_posicao] = src.genetico.reproducao(individuo)
-        contador_posicao += 1
-    elif operacao == "Mutação":
-        individuo = src.genetico.selecao_roleta(lista_caminhos)
-        nova_lista_caminhos[contador_posicao] = src.genetico.mutacao(individuo)
-        contador_posicao += 1
+    contador_posicao = 0
+    # seleção e envio para crossover, mutação ou reprodução
+    while len(nova_lista_caminhos) < 100:
+        operacao = src.genetico.escolha_operacao()
+        if operacao == "Crossover":
+            individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
+            individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
+            nova_lista_caminhos[contador_posicao] =  src.genetico.crossover(individuo_1, individuo_2)
+            contador_posicao += 1
+        elif operacao == "Reprodução":
+            individuo = src.genetico.selecao_roleta(lista_caminhos)
+            nova_lista_caminhos[contador_posicao] = src.genetico.reproducao(individuo, inicializacao)
+            contador_posicao += 1
+        elif operacao == "Mutação":
+            individuo = src.genetico.selecao_roleta(lista_caminhos)
+            nova_lista_caminhos[contador_posicao] = src.genetico.mutacao(individuo)
+            contador_posicao += 1
 
 
-#estabelecimento da nova população
+    #estabelecimento da nova população
 
-#avaliação do critério de parada ou repetição do processo
+    #avaliação do critério de parada ou repetição do processo

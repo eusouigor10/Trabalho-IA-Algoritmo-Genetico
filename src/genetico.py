@@ -46,12 +46,12 @@ def selecao_roleta(populacao):
             return individuo
 
 
-def criarIndividuo(individuo):
+def criarIndividuo(individuo, inicializacao):
     novoIndividuo = Caminho()
 
     novoIndividuo.cidades = individuo
 
-    Inicializacao.calculo_distancia_total_caminho(novoIndividuo)
+    inicializacao.calculo_distancia_total_caminho(novoIndividuo)
 
     calcula_fitness(novoIndividuo)
 
@@ -91,10 +91,10 @@ def crossover(individuo1, individuo2):
     return novoIndividuo
 
 
-def reproducao(individuo):
+def reproducao(individuo, inicializacao):
     # Realiza a reproducao do individuo
 
-    return criarIndividuo(individuo.cidades)
+    return criarIndividuo(individuo.cidades, inicializacao)
 
 
 def mutacao(individuo):    
