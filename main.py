@@ -10,7 +10,7 @@ count_geracoes_sem_melhora = 0
 historico_melhores_individuos = []
 parada = False
 inicializacao = Inicializacao()
-lista_caminhos = inicializacao.lista_caminhos
+lista_caminhos = inicializacao.lista_caminhos.copy()
 nova_lista_caminhos = [None] * len(lista_caminhos)
 
 if __name__ == "__main__":
@@ -43,5 +43,6 @@ if __name__ == "__main__":
         contador_posicao += 1
 
     #estabelecimento da nova população
+    lista_caminhos = nova_lista_caminhos.copy()
 
     #avaliação do critério de parada ou repetição do processo
