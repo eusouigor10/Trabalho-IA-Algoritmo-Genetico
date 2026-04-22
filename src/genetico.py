@@ -6,11 +6,13 @@ from src.const.probabilidades import OP_PROB
 from src.caminho import Caminho
 from src.inicializacao import Inicializacao
 
-
 def calcula_fitness(individuo):
     # Calcula a fitness do individuo
 
-    fitness = 1 / individuo.distancia_total
+    if individuo.distancia_total == 0:
+        return 0
+    else:
+        fitness = 1 / individuo.distancia_total
 
     individuo.fitness = fitness
 
@@ -58,7 +60,7 @@ def criarIndividuo(individuo, inicializacao):
     return novoIndividuo
     
 
-def crossover(individuo1, individuo2):
+def crossover(individuo1, individuo2, inicializacao):
     # Realiza o crossover entre dois individuos
     # A B C D | E F G H | I J K L M N - 14 / 3 = 4.66 -> 4
 
@@ -86,7 +88,7 @@ def crossover(individuo1, individuo2):
         filho[i] = individuo2.cidades[j]
         j += 1
 
-    novoIndividuo = criarIndividuo(filho)
+    novoIndividuo = criarIndividuo(filho, inicializacao)
 
     return novoIndividuo
 
@@ -97,7 +99,7 @@ def reproducao(individuo, inicializacao):
     return criarIndividuo(individuo.cidades, inicializacao)
 
 
-def mutacao(individuo):    
+def mutacao(individuo, inicializacao):    
     # Realiza a mutacao do individuo
     list_copy = individuo.cidades.copy()
 
@@ -110,9 +112,19 @@ def mutacao(individuo):
     
     individuo.cidades[j] = backup
 
-    novoIndividuo = criarIndividuo(individuo.cidades)
+    novoIndividuo = criarIndividuo(individuo.cidades, inicializacao)
 
     return novoIndividuo
+
+def captura_melhor_individuo(populacao):
+    fitness_melhor_individuo = 0
+    for individuo in populacao:
+        if individuo.fitness > fitness_melhor_individuo:
+            fitness_melhor_individuo = individuo.fitness
+    
+    for individuo in populacao:
+        if individuo.fitness == fitness_melhor_individuo:
+            return individuo
 
 
 # * @param população: vetor de caminhos
