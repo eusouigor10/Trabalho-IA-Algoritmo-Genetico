@@ -2,6 +2,7 @@
 
 import src.genetico
 from src.inicializacao import Inicializacao
+from src.enum.operacao import Operacao
 
 # Variáveis globais para controle do algoritmo
 melhor_individuo_atual = None
@@ -26,20 +27,20 @@ if __name__ == "__main__":
     # seleção e envio para crossover, mutação ou reprodução
     while len(nova_lista_caminhos) < 100:
         operacao = src.genetico.escolha_operacao()
-        if operacao == "Crossover":
+        if operacao == Operacao.CROSSOVER:
             individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
             individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
             nova_lista_caminhos[contador_posicao] =  src.genetico.crossover(individuo_1, individuo_2)
-            contador_posicao += 1
-        elif operacao == "Reprodução":
+            
+        elif operacao == Operacao.REPRODUCAO:
             individuo = src.genetico.selecao_roleta(lista_caminhos)
             nova_lista_caminhos[contador_posicao] = src.genetico.reproducao(individuo, inicializacao)
-            contador_posicao += 1
-        elif operacao == "Mutação":
+            
+        elif operacao == Operacao.MUTACAO:
             individuo = src.genetico.selecao_roleta(lista_caminhos)
             nova_lista_caminhos[contador_posicao] = src.genetico.mutacao(individuo)
-            contador_posicao += 1
-
+            
+        contador_posicao += 1
 
     #estabelecimento da nova população
 
