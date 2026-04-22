@@ -99,8 +99,11 @@ def reproducao(individuo, inicializacao):
 
 def mutacao(individuo):    
     # Realiza a mutacao do individuo
-    i, j = random.sample(range(len(individuo.cidades)), 2)
+    list_copy = individuo.cidades.copy()
 
+    i, j = random.sample(range(len(list_copy)), 2)
+
+    # Swap
     backup = individuo.cidades[i]
 
     individuo.cidades[i] = individuo.cidades[j]
