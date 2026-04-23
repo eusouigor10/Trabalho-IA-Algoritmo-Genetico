@@ -17,6 +17,7 @@ if __name__ == "__main__":
     # inicialização com a criação da população inicial, caminhos iniciais e distâncias
     inicializacao.parte_1()
     
+    # Geração inicial
     lista_caminhos = inicializacao.lista_caminhos.copy()
 
     while parada == False:
@@ -24,6 +25,7 @@ if __name__ == "__main__":
         for caminho in lista_caminhos:
             src.genetico.calcula_fitness(caminho)
             
+        # Nova geração
         nova_lista_caminhos = []
 
         # seleção e envio para crossover, mutação ou reprodução
@@ -42,12 +44,14 @@ if __name__ == "__main__":
                 individuo = src.genetico.selecao_roleta(lista_caminhos)
                 nova_lista_caminhos.append(src.genetico.mutacao(individuo, inicializacao))
 
-        melhor = src.genetico.captura_melhor_individuo(nova_lista_caminhos)
-        historico_melhores_individuos.append(melhor)
-        print(melhor.distancia_total)
+        #avaliação do critério de parada ou repetição do processo
+        parada, melhor_individuo_atual, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_individuo_atual, count_geracoes_sem_melhora)
+
+        # Salvando melhor indivíduo
+        historico_melhores_individuos.append(melhor_individuo_atual)
+        print(melhor_individuo_atual.distancia_total)
         
         #estabelecimento da nova população
         lista_caminhos = nova_lista_caminhos.copy()
 
-        #avaliação do critério de parada ou repetição do processo
-        parada, melhor_individuo_atual, count_geracoes_sem_melhora = src.genetico.criterio_parada(lista_caminhos, historico_melhores_individuos[-1], count_geracoes_sem_melhora)
+        

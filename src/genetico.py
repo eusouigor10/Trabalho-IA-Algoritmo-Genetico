@@ -139,7 +139,7 @@ def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melh
     # Tolerância para considerar que houve melhora
     tolerancia = 0.05 # ? Alterar este valor?
 
-    melhor_individuo_atual = min(individuo.distancia_total for individuo in populacao)
+    melhor_individuo_atual = captura_melhor_individuo(populacao)
 
     # Primeira geração
     if melhor_individuo_passado is None:
