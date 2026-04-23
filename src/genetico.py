@@ -60,15 +60,15 @@ def criarIndividuo(individuo, inicializacao):
 
     novoIndividuo.cidades = individuo
 
-    print(f"\nNovo individuo criado: {len(novoIndividuo.cidades)} cidades\n")
+    #print(f"\nNovo individuo criado: {len(novoIndividuo.cidades)} cidades\n")
 
     novoIndividuo.distancia_total = inicializacao.calculo_distancia_total_caminho(novoIndividuo)
 
-    print(f"Distância total do novo individuo: {novoIndividuo.distancia_total}\n")
+    #print(f"Distância total do novo individuo: {novoIndividuo.distancia_total}\n")
 
     calcula_fitness(novoIndividuo)
 
-    print(f"Fitness do novo individuo: {novoIndividuo.fitness}\n")
+    #print(f"Fitness do novo individuo: {novoIndividuo.fitness}\n")
 
     return novoIndividuo
     
@@ -76,9 +76,9 @@ def criarIndividuo(individuo, inicializacao):
 def crossover(individuo1, individuo2, inicializacao):
     # Realiza o crossover entre dois individuos
     # A B C D | E F G H | I J K L M N - 14 / 3 = 4.66 -> 4
-    printIndividuo(individuo1, 1)
+    #printIndividuo(individuo1, 1)
 
-    printIndividuo(individuo2, 2)
+    #printIndividuo(individuo2, 2)
 
     if(len(individuo1.cidades) != len(individuo2.cidades)):
         raise ValueError("Os individuos devem ter o mesmo numero de cidades")
@@ -119,8 +119,8 @@ def crossover(individuo1, individuo2, inicializacao):
 
     novoIndividuo = criarIndividuo(filho, inicializacao)
 
-    print("Filho:\n")
-    printIndividuo(novoIndividuo, "Filho")
+    #print("Filho:\n")
+    #printIndividuo(novoIndividuo, "Filho")
 
     return novoIndividuo
 
@@ -128,14 +128,14 @@ def crossover(individuo1, individuo2, inicializacao):
 def reproducao(individuo, inicializacao):
     # Realiza a reproducao do individuo
 
-    printIndividuo(individuo, "Reprodução")
+    #printIndividuo(individuo, "Reprodução")
 
     return criarIndividuo(individuo.cidades, inicializacao)
 
 
 def mutacao(individuo, inicializacao):   
-    print("Indivíduo antes da mutação:\n")
-    printIndividuo(individuo, "Antes da Mutação")
+    #print("Indivíduo antes da mutação:\n")
+    #printIndividuo(individuo, "Antes da Mutação")
 
     cidades = individuo.cidades
 
@@ -158,8 +158,8 @@ def mutacao(individuo, inicializacao):
 
     novo_individuo = criarIndividuo(novo_caminho, inicializacao)
 
-    print("Indivíduo após a mutação:\n")
-    printIndividuo(novo_individuo, "Após Mutação")
+    #print("Indivíduo após a mutação:\n")
+    #printIndividuo(novo_individuo, "Após Mutação")
 
     return novo_individuo
 
