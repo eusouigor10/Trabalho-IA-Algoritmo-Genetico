@@ -5,11 +5,17 @@ from src.inicializacao import Inicializacao
 from src.enum.operacao import Operacao
 
 # Variáveis globais para controle do algoritmo
-melhor_individuo_atual = None
+melhor_distancia = None # * Numero
 count_geracoes_sem_melhora = 0
 historico_melhores_individuos = []
 parada = False
 inicializacao = Inicializacao()
+
+def printarGeracao(populacao):
+    i = 1
+    for individuo in populacao:
+        print(f"Indivíduo: {i}, Distância Total: {individuo.distancia_total}, Fitness: {individuo.fitness}\n")
+        i += 1
 
 if __name__ == "__main__":
     print("Iniciando o algoritmo genético...")
@@ -20,38 +26,57 @@ if __name__ == "__main__":
     # Geração inicial
     lista_caminhos = inicializacao.lista_caminhos.copy()
 
+    #print("\nGeração inicial: \n")
+    #printarGeracao(lista_caminhos)
+
+    # Nova geração
+    nova_lista_caminhos = []
+
     while parada == False:
         # cálculo da fitness de cada caminho
         for caminho in lista_caminhos:
             src.genetico.calcula_fitness(caminho)
-            
-        # Nova geração
-        nova_lista_caminhos = []
+
+        #print("\nFitness calculada: \n")
+        #printarGeracao(lista_caminhos)
 
         # seleção e envio para crossover, mutação ou reprodução
         while len(nova_lista_caminhos) < 100:
             operacao = src.genetico.escolha_operacao()
+
+            print(f"\nOperação escolhida: {operacao}\n")
+
             if operacao == Operacao.CROSSOVER:
                 individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
                 individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
+
                 nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
                 
             elif operacao == Operacao.REPRODUCAO:
                 individuo = src.genetico.selecao_roleta(lista_caminhos)
+
                 nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
                 
             elif operacao == Operacao.MUTACAO:
                 individuo = src.genetico.selecao_roleta(lista_caminhos)
+                
                 nova_lista_caminhos.append(src.genetico.mutacao(individuo, inicializacao))
 
+        exit()
+
         #avaliação do critério de parada ou repetição do processo
-        parada, melhor_individuo_atual, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_individuo_atual, count_geracoes_sem_melhora)
+        parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
 
         # Salvando melhor indivíduo
-        historico_melhores_individuos.append(melhor_individuo_atual)
-        print(melhor_individuo_atual.distancia_total)
+        historico_melhores_individuos.append(melhor_distancia)
         
         #estabelecimento da nova população
         lista_caminhos = nova_lista_caminhos.copy()
 
-        
+        print("Nova geração: " + str(lista_caminhos))
+
+        print(f"Geração atual: {len(historico_melhores_individuos)}, Melhor distância: {melhor_distancia}, Gerações sem melhora: {count_geracoes_sem_melhora}")
+
+    print("Algoritmo genético finalizado.")
+    print(f"Melhor distância encontrada: {melhor_distancia}")
+    print(f"Histórico dos melhores indivíduos: {historico_melhores_individuos}")
