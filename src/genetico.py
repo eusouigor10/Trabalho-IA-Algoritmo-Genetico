@@ -16,6 +16,8 @@ def calcula_fitness(individuo):
 
     individuo.fitness = fitness
 
+    #print(f"\nDistância Total: {individuo.distancia_total}, Fitness: {individuo.fitness}")
+
     return fitness
 
 
@@ -53,9 +55,15 @@ def criarIndividuo(individuo, inicializacao):
 
     novoIndividuo.cidades = individuo
 
+    print(f"\nNovo individuo criado: {len(novoIndividuo.cidades)} cidades\n")
+
     inicializacao.calculo_distancia_total_caminho(novoIndividuo)
 
+    print(f"Distância total do novo individuo: {novoIndividuo.distancia_total}\n")
+
     calcula_fitness(novoIndividuo)
+
+    print(f"Fitness do novo individuo: {novoIndividuo.fitness}\n")
 
     return novoIndividuo
     
@@ -63,32 +71,50 @@ def criarIndividuo(individuo, inicializacao):
 def crossover(individuo1, individuo2, inicializacao):
     # Realiza o crossover entre dois individuos
     # A B C D | E F G H | I J K L M N - 14 / 3 = 4.66 -> 4
+    print(f"Indivíduo 1: Distância Total = {individuo1.distancia_total}, Fitness = {individuo1.fitness}")
+
+    print(f"Indivíduo 2: Distância Total = {individuo2.distancia_total}, Fitness = {individuo2.fitness}")
 
     if(len(individuo1.cidades) != len(individuo2.cidades)):
         raise ValueError("Os individuos devem ter o mesmo numero de cidades")
+    
+    if individuo1.cidades[0] != individuo2.cidades[0]:
+        raise ValueError("Os individuos devem iniciar na mesma cidade")
 
-    filho = [None] * len(individuo1.cidades)
+    # Retira cidade inicial
+    cidade_inicial = individuo1.cidades[0]
 
-    corte = len(individuo1.cidades) // 3
+    caminho1 = individuo1.cidades[1:-1]
+    caminho2 = individuo2.cidades[1:-1]
+
+    tamanho = len(caminho1)
+    
+    filho = [None] * tamanho
+
+    corte = max(1, tamanho // 3)
 
     # Copia a parte central do individuo 1 para o filho
     for i in range(corte, 2 * corte):
-        filho[i] = individuo1.cidades[i]
+        filho[i] = caminho1[i]
 
     # Preenche o restante do filho com cidades do individuo 2
-    j = 0
+    restantes = [cidade for cidade in caminho2 if cidade not in filho]
 
-    for i in range(len(filho)):
-        if corte <= i < 2 * corte:
-            continue
+    if len(restantes) != filho.count(None):
+        raise ValueError("Erro no crossover: quantidade inconsistente de cidades")
 
-        while individuo2.cidades[j] in filho:
-            j += 1
+    k = 0
+    for i in range(tamanho):
+        if filho[i] is None:
+            filho[i] = restantes[k]
+            k += 1
 
-        filho[i] = individuo2.cidades[j]
-        j += 1
+    # Finaliza filho
+    filho = [cidade_inicial] + filho + [cidade_inicial]
 
     novoIndividuo = criarIndividuo(filho, inicializacao)
+
+    print(f"Filho: Distância Total = {novoIndividuo.distancia_total}, Fitness = {novoIndividuo.fitness}")
 
     return novoIndividuo
 
@@ -96,27 +122,40 @@ def crossover(individuo1, individuo2, inicializacao):
 def reproducao(individuo, inicializacao):
     # Realiza a reproducao do individuo
 
+    print(f"Indivíduo: Distância Total = {individuo.distancia_total}, Fitness = {individuo.fitness}")
+
     return criarIndividuo(individuo.cidades, inicializacao)
 
 
-def mutacao(individuo, inicializacao):    
-    # Realiza a mutacao do individuo
-    list_copy = individuo.cidades.copy()
+def mutacao(individuo, inicializacao):   
+    print(f"Indivíduo antes da mutação: Distância Total = {individuo.distancia_total}, Fitness = {individuo.fitness}")
 
-    i, j = random.sample(range(len(list_copy)), 2)
+    cidades = individuo.cidades
+
+    # Guarda cidade inicial
+    cidade_inicial = cidades[0]
+
+    caminho = cidades[1:-1].copy()
+
+    if len(caminho) < 2:
+        return individuo  # nada pra mutar
+
+    # Escolhe posições válidas no caminho
+    i, j = random.sample(range(len(caminho)), 2)
 
     # Swap
-    backup = individuo.cidades[i]
+    caminho[i], caminho[j] = caminho[j], caminho[i]
 
-    individuo.cidades[i] = individuo.cidades[j]
-    
-    individuo.cidades[j] = backup
+    # Reconstrói o indivíduo
+    novo_caminho = [cidade_inicial] + caminho + [cidade_inicial]
 
-    novoIndividuo = criarIndividuo(individuo.cidades, inicializacao)
+    novo_individuo = criarIndividuo(novo_caminho, inicializacao)
 
-    return novoIndividuo
+    print(f"Indivíduo após a mutação: Distância Total = {novo_individuo.distancia_total}, Fitness = {novo_individuo.fitness}")
 
-def captura_melhor_individuo(populacao):
+    return novo_individuo
+
+def captura_melhor_dist(populacao):
     fitness_melhor_individuo = 0
     for individuo in populacao:
         if individuo.fitness > fitness_melhor_individuo:
@@ -124,7 +163,7 @@ def captura_melhor_individuo(populacao):
     
     for individuo in populacao:
         if individuo.fitness == fitness_melhor_individuo:
-            return individuo
+            return individuo.distancia_total
 
 
 # * @param população: vetor de caminhos
@@ -137,30 +176,36 @@ def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melh
     limite = 50 # ? Alterar este valor?
 
     # Tolerância para considerar que houve melhora
-    tolerancia = 0.05 # ? Alterar este valor?
+    tolerancia = 0.001 # ? Alterar este valor?
 
-    melhor_individuo_atual = captura_melhor_individuo(populacao)
+    melhor_dist = captura_melhor_dist(populacao)
 
     # Primeira geração
     if melhor_individuo_passado is None:
-        return False, melhor_individuo_atual, 0
+        return False, melhor_dist, 0
     
-    melhora = (melhor_individuo_passado - melhor_individuo_atual) / melhor_individuo_passado
+    if melhor_dist < melhor_individuo_passado:
+        if melhor_individuo_passado == 0:
+            melhora = 0
+        else:
+            melhora = (melhor_individuo_passado - melhor_dist) / melhor_individuo_passado
 
-    if melhora < tolerancia:
-        count_geracoes_sem_melhora += 1
+        if melhora >= tolerancia:
+            count_geracoes_sem_melhora = 0
+        else:
+            count_geracoes_sem_melhora += 1
     else:
-        count_geracoes_sem_melhora = 0
+        count_geracoes_sem_melhora += 1
 
     parar = count_geracoes_sem_melhora >= limite
 
     '''
         Retorno:
         - parar: booleano indicando se o critério de parada foi atingido
-        - melhor_individuo_atual: melhor caminho da geração atual
+        - melhor_dist: melhor caminho da geração atual
         - count_geracoes_sem_melhora: contador atualizado de gerações sem melhora
     '''
-    return parar, melhor_individuo_atual, count_geracoes_sem_melhora
+    return parar, melhor_dist, count_geracoes_sem_melhora
 
 # ! Talvez este método não será necessário
 def substituicao_geracao():
