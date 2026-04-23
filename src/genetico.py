@@ -49,6 +49,11 @@ def selecao_roleta(populacao):
         if acumulado >= num_aleatorio:
             return individuo
 
+def printIndividuo(individuo, num):
+    vetor = [str(cidade.id) for cidade in individuo.cidades]
+    caminho_str = ", ".join(vetor)
+
+    print(f"\nIndividuo {num}: [{caminho_str}] - Distância Total = {individuo.distancia_total}, Fitness = {individuo.fitness}")
 
 def criarIndividuo(individuo, inicializacao):
     novoIndividuo = Caminho()
@@ -57,7 +62,7 @@ def criarIndividuo(individuo, inicializacao):
 
     print(f"\nNovo individuo criado: {len(novoIndividuo.cidades)} cidades\n")
 
-    inicializacao.calculo_distancia_total_caminho(novoIndividuo)
+    novoIndividuo.distancia_total = inicializacao.calculo_distancia_total_caminho(novoIndividuo)
 
     print(f"Distância total do novo individuo: {novoIndividuo.distancia_total}\n")
 
@@ -71,9 +76,9 @@ def criarIndividuo(individuo, inicializacao):
 def crossover(individuo1, individuo2, inicializacao):
     # Realiza o crossover entre dois individuos
     # A B C D | E F G H | I J K L M N - 14 / 3 = 4.66 -> 4
-    print(f"Indivíduo 1: Distância Total = {individuo1.distancia_total}, Fitness = {individuo1.fitness}")
+    printIndividuo(individuo1, 1)
 
-    print(f"Indivíduo 2: Distância Total = {individuo2.distancia_total}, Fitness = {individuo2.fitness}")
+    printIndividuo(individuo2, 2)
 
     if(len(individuo1.cidades) != len(individuo2.cidades)):
         raise ValueError("Os individuos devem ter o mesmo numero de cidades")
@@ -114,7 +119,8 @@ def crossover(individuo1, individuo2, inicializacao):
 
     novoIndividuo = criarIndividuo(filho, inicializacao)
 
-    print(f"Filho: Distância Total = {novoIndividuo.distancia_total}, Fitness = {novoIndividuo.fitness}")
+    print("Filho:\n")
+    printIndividuo(novoIndividuo, "Filho")
 
     return novoIndividuo
 
@@ -122,13 +128,14 @@ def crossover(individuo1, individuo2, inicializacao):
 def reproducao(individuo, inicializacao):
     # Realiza a reproducao do individuo
 
-    print(f"Indivíduo: Distância Total = {individuo.distancia_total}, Fitness = {individuo.fitness}")
+    printIndividuo(individuo, "Reprodução")
 
     return criarIndividuo(individuo.cidades, inicializacao)
 
 
 def mutacao(individuo, inicializacao):   
-    print(f"Indivíduo antes da mutação: Distância Total = {individuo.distancia_total}, Fitness = {individuo.fitness}")
+    print("Indivíduo antes da mutação:\n")
+    printIndividuo(individuo, "Antes da Mutação")
 
     cidades = individuo.cidades
 
@@ -151,7 +158,8 @@ def mutacao(individuo, inicializacao):
 
     novo_individuo = criarIndividuo(novo_caminho, inicializacao)
 
-    print(f"Indivíduo após a mutação: Distância Total = {novo_individuo.distancia_total}, Fitness = {novo_individuo.fitness}")
+    print("Indivíduo após a mutação:\n")
+    printIndividuo(novo_individuo, "Após Mutação")
 
     return novo_individuo
 
@@ -173,7 +181,7 @@ def criterio_parada(populacao, melhor_individuo_passado, count_geracoes_sem_melh
     # Verifica se o criterio de parada foi atingido
 
     # Limite de gerações sem melhora
-    limite = 50 # ? Alterar este valor?
+    limite = 1000 # ? Alterar este valor?
 
     # Tolerância para considerar que houve melhora
     tolerancia = 0.001 # ? Alterar este valor?

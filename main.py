@@ -7,7 +7,8 @@ from src.enum.operacao import Operacao
 # Variáveis globais para controle do algoritmo
 melhor_distancia = None # * Numero
 count_geracoes_sem_melhora = 0
-historico_melhores_individuos = []
+historico_melhor_dist = []
+# TODO Historico de fitness
 parada = False
 inicializacao = Inicializacao()
 
@@ -62,21 +63,20 @@ if __name__ == "__main__":
                 
                 nova_lista_caminhos.append(src.genetico.mutacao(individuo, inicializacao))
 
-        exit()
-
         #avaliação do critério de parada ou repetição do processo
         parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
 
         # Salvando melhor indivíduo
-        historico_melhores_individuos.append(melhor_distancia)
+        historico_melhor_dist.append(melhor_distancia)
         
         #estabelecimento da nova população
         lista_caminhos = nova_lista_caminhos.copy()
 
-        print("Nova geração: " + str(lista_caminhos))
+        #print("Nova geração: \n")
+        #printarGeracao(lista_caminhos)
 
-        print(f"Geração atual: {len(historico_melhores_individuos)}, Melhor distância: {melhor_distancia}, Gerações sem melhora: {count_geracoes_sem_melhora}")
+        #print(f"Geração atual: {len(historico_melhor_dist)}, Melhor distância: {melhor_distancia}, Gerações sem melhora: {count_geracoes_sem_melhora}")
 
-    print("Algoritmo genético finalizado.")
-    print(f"Melhor distância encontrada: {melhor_distancia}")
-    print(f"Histórico dos melhores indivíduos: {historico_melhores_individuos}")
+    print("\n\nAlgoritmo genético finalizado.\n")
+    print(f"Melhor distância encontrada: {melhor_distancia}\n")
+    #print(f"Histórico dos melhores indivíduos: {historico_melhor_dist}")
