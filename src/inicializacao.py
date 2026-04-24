@@ -20,7 +20,7 @@ class Inicializacao:
 
     # criar o grafo  
     def criacao_grafo(self):
-        with open('src/cenario1.txt', 'r', encoding='utf-8') as arquivo:
+        with open('src/eil51.txt', 'r', encoding='utf-8') as arquivo:
             while True:
                 linha = arquivo.readline() # lê linha por linha
 
@@ -42,7 +42,7 @@ class Inicializacao:
         id1, x1, y1 = c1.id, c1.x, c1.y
         id2, x2, y2 = c2.id, c2.x, c2.y
 
-        return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5 #retorna a distância entre as duas cidades passadas como parâmetro
+        return round(((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5) #retorna a distância entre as duas cidades passadas como parâmetro
     
     # criação da matriz de adjacências que representa o grafo
     def criacao_matriz_grafo(self):

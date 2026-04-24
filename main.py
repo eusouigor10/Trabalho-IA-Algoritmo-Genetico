@@ -27,25 +27,23 @@ if __name__ == "__main__":
     # Geração inicial
     lista_caminhos = inicializacao.lista_caminhos.copy()
 
-    #print("\nGeração inicial: \n")
-    #printarGeracao(lista_caminhos)
-
-    # Nova geração
-    nova_lista_caminhos = []
-
     while parada == False:
+
+        # Nova geração
+        nova_lista_caminhos = []
+        
         # cálculo da fitness de cada caminho
         for caminho in lista_caminhos:
             src.genetico.calcula_fitness(caminho)
 
-        #print("\nFitness calculada: \n")
-        #printarGeracao(lista_caminhos)
+        #elitismo
+        melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
+        nova_lista_caminhos.append(melhor_individuo_atual)
 
         # seleção e envio para crossover, mutação ou reprodução
         while len(nova_lista_caminhos) < 100:
             operacao = src.genetico.escolha_operacao()
 
-            #print(f"\nOperação escolhida: {operacao}\n")
 
             if operacao == Operacao.CROSSOVER:
                 individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
@@ -61,7 +59,7 @@ if __name__ == "__main__":
             elif operacao == Operacao.MUTACAO:
                 individuo = src.genetico.selecao_roleta(lista_caminhos)
                 
-                nova_lista_caminhos.append(src.genetico.mutacao(individuo, inicializacao))
+                nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
 
         #avaliação do critério de parada ou repetição do processo
         parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
@@ -72,12 +70,7 @@ if __name__ == "__main__":
         #estabelecimento da nova população
         lista_caminhos = nova_lista_caminhos.copy()
 
-        #print("Nova geração: \n")
-        #printarGeracao(lista_caminhos)
-
-        #print(f"Geração atual: {len(historico_melhor_dist)}, Melhor distância: {melhor_distancia}, Gerações sem melhora: {count_geracoes_sem_melhora}")
 
     print("\n\nAlgoritmo genético finalizado.\n")
     print(f"Gerações Totais: {len(historico_melhor_dist)}\n")
     print(f"Melhor distância encontrada: {melhor_distancia}\n")
-    #print(f"Histórico dos melhores indivíduos: {historico_melhor_dist}")

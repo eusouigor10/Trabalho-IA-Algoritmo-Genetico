@@ -163,6 +163,42 @@ def mutacao(individuo, inicializacao):
 
     return novo_individuo
 
+def mutacao_inversao(individuo, inicializacao):
+    cidades = individuo.cidades
+    cidade_inicial = cidades[0]
+    caminho = cidades[1:-1].copy()
+
+    if len(caminho) < 2:
+        return individuo
+
+    # Escolhe dois pontos aleatórios e inverte o segmento entre eles
+    idx1, idx2 = sorted(random.sample(range(len(caminho)), 2))
+    caminho[idx1:idx2] = reversed(caminho[idx1:idx2])
+
+    novo_caminho = [cidade_inicial] + caminho + [cidade_inicial]
+    return criarIndividuo(novo_caminho, inicializacao)
+
+def mutacao_dupla(individuo, inicializacao):
+    cidades = individuo.cidades
+    cidade_inicial = cidades[0]
+    caminho = cidades[1:-1].copy()
+
+    # Precisamos de pelo menos 4 cidades para fazer duas trocas distintas
+    if len(caminho) < 4:
+        return individuo
+
+    # Realiza a PRIMEIRA troca
+    i1, j1 = random.sample(range(len(caminho)), 2)
+    caminho[i1], caminho[j1] = caminho[j1], caminho[i1]
+
+    # Realiza a SEGUNDA troca
+    i2, j2 = random.sample(range(len(caminho)), 2)
+    caminho[i2], caminho[j2] = caminho[j2], caminho[i2]
+
+    # Reconstrói
+    novo_caminho = [cidade_inicial] + caminho + [cidade_inicial]
+    return criarIndividuo(novo_caminho, inicializacao)
+
 def captura_melhor_dist(populacao):
     fitness_melhor_individuo = 0
     for individuo in populacao:
@@ -172,6 +208,15 @@ def captura_melhor_dist(populacao):
     for individuo in populacao:
         if individuo.fitness == fitness_melhor_individuo:
             return individuo.distancia_total
+        
+def captura_melhor_individuo(populacao):
+    melhor_individo = Caminho()
+    melhor_individo.distancia_total = float('inf')
+    for individuo in populacao:
+        if individuo.distancia_total < melhor_individo.distancia_total:
+            melhor_individo = individuo
+    
+    return melhor_individo
 
 
 # * @param população: vetor de caminhos
