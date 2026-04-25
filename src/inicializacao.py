@@ -5,13 +5,14 @@ import random
 
 class Inicializacao:
 
-    def __init__(self):
+    def __init__(self, arquivo):
         self.cidades = []
         self.cidade_inicial = None
         self.matriz_adjacencias = []
         self.linhas = 0
         self.cidade_aleatoria = None
         self.lista_caminhos = []
+        self.arquivo = arquivo
 
     def parte_1(self):
         self.criacao_grafo()
@@ -20,7 +21,7 @@ class Inicializacao:
 
     # criar o grafo  
     def criacao_grafo(self):
-        with open('src/eil51.txt', 'r', encoding='utf-8') as arquivo:
+        with open(self.arquivo, 'r', encoding='utf-8') as arquivo:
             while True:
                 linha = arquivo.readline() # lê linha por linha
 

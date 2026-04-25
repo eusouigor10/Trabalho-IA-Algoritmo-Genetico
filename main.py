@@ -10,7 +10,7 @@ count_geracoes_sem_melhora = 0
 historico_melhor_dist = []
 # TODO Historico de fitness
 parada = False
-inicializacao = Inicializacao()
+inicializacao = Inicializacao('src/kroB200.txt')
 
 def printarGeracao(populacao):
     i = 1
