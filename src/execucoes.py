@@ -3,189 +3,86 @@ from src.inicializacao import Inicializacao
 from src.enum.operacao import Operacao
 import time
 
-# para 51 cidades
-# Variáveis globais para controle do algoritmo
-melhor_distancia = None # * Numero
-count_geracoes_sem_melhora = 0
-historico_melhor_dist = []
-# TODO Historico de fitness
-parada = False
+class Execucoes:
 
-inicio = time.perf_counter()
-print("Iniciando o algoritmo genético para 51 cidades...")
+    def __init__(self, arquivo):
+        self.arquivo = arquivo
+        # Variáveis globais para controle do algoritmo
+        self.melhor_distancia = None # * Numero
+        self.count_geracoes_sem_melhora = 0
+        self.historico_melhor_dist = []
+        # TODO Historico de fitness
+        self.parada = False
 
-inicializacao = Inicializacao('src/eil51.txt')
+    def execucao(self):
+        inicio = time.perf_counter()
 
-# inicialização com a criação da população inicial, caminhos iniciais e distâncias
-inicializacao.parte_1()
-    
-# Geração inicial
-lista_caminhos = inicializacao.lista_caminhos.copy()
+        inicializacao = Inicializacao(self.arquivo)
 
-while parada == False:
+        # inicialização com a criação da população inicial, caminhos iniciais e distâncias
+        inicializacao.parte_1()
 
-    # Nova geração
-    nova_lista_caminhos = []
-        
-    # cálculo da fitness de cada caminho
-    for caminho in lista_caminhos:
-        src.genetico.calcula_fitness(caminho)
+        print(f"Iniciando o algoritmo genético para {len(inicializacao.cidades)} cidades...")
+            
+        # Geração inicial
+        lista_caminhos = inicializacao.lista_caminhos.copy()
 
-    #elitismo
-    melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
-    nova_lista_caminhos.append(melhor_individuo_atual)
+        geracao_atual = 0
 
-    # seleção e envio para crossover, mutação ou reprodução
-    while len(nova_lista_caminhos) < 100:
-        operacao = src.genetico.escolha_operacao()
+        while self.parada == False:
 
+            geracao_atual += 1
+            if geracao_atual % 1000 == 0:
+                print(f"Geração: {geracao_atual}")
 
-        if operacao == Operacao.CROSSOVER:
-            individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
-            individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
-
-            nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
+            # Nova geração
+            nova_lista_caminhos = []
                 
-        elif operacao == Operacao.REPRODUCAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
+            # cálculo da fitness de cada caminho
+            for caminho in lista_caminhos:
+                src.genetico.calcula_fitness(caminho)
 
-            nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
+            #elitismo
+            melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
+            nova_lista_caminhos.append(melhor_individuo_atual)
+
+            # seleção e envio para crossover, mutação ou reprodução
+            while len(nova_lista_caminhos) < 100:
+                operacao = src.genetico.escolha_operacao()
+
+
+                if operacao == Operacao.CROSSOVER:
+                    individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
+                    individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
+
+                    nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
+                        
+                elif operacao == Operacao.REPRODUCAO:
+                    individuo = src.genetico.selecao_roleta(lista_caminhos)
+
+                    nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
+                        
+                elif operacao == Operacao.MUTACAO:
+                    individuo = src.genetico.selecao_roleta(lista_caminhos)
+                        
+                    nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
+
+            #avaliação do critério de parada ou repetição do processo
+            self.parada, melhor_distancia, self.count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, self.melhor_distancia, self.count_geracoes_sem_melhora)
+
+            if geracao_atual > 10000:
+                self.parada = True
+
+            # Salvando melhor indivíduo
+            self.historico_melhor_dist.append(melhor_distancia)
                 
-        elif operacao == Operacao.MUTACAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
-                
-            nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
+            #estabelecimento da nova população
+            lista_caminhos = nova_lista_caminhos.copy()
 
-    #avaliação do critério de parada ou repetição do processo
-    parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
+        fim = time.perf_counter()
 
-    # Salvando melhor indivíduo
-    historico_melhor_dist.append(melhor_distancia)
-        
-    #estabelecimento da nova população
-    lista_caminhos = nova_lista_caminhos.copy()
+        tempo = fim - inicio
 
-fim = time.perf_counter()
-
-tempo = fim - inicio
-
-print("\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {tempo:.4f}.\n")
-print(f"Gerações Totais: {len(historico_melhor_dist)}\n")
-print(f"Melhor distância encontrada: {melhor_distancia}\n")
-
-#575 cidades
-print("Iniciando o algoritmo genético para 575 cidades...")
-
-inicializacao = Inicializacao('src/rat575.txt')
-
-# inicialização com a criação da população inicial, caminhos iniciais e distâncias
-inicializacao.parte_1()
-    
-# Geração inicial
-lista_caminhos = inicializacao.lista_caminhos.copy()
-
-while parada == False:
-
-    # Nova geração
-    nova_lista_caminhos = []
-        
-    # cálculo da fitness de cada caminho
-    for caminho in lista_caminhos:
-        src.genetico.calcula_fitness(caminho)
-
-    #elitismo
-    melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
-    nova_lista_caminhos.append(melhor_individuo_atual)
-
-    # seleção e envio para crossover, mutação ou reprodução
-    while len(nova_lista_caminhos) < 100:
-        operacao = src.genetico.escolha_operacao()
-
-
-        if operacao == Operacao.CROSSOVER:
-            individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
-            individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
-
-            nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
-                
-        elif operacao == Operacao.REPRODUCAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
-
-            nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
-                
-        elif operacao == Operacao.MUTACAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
-                
-            nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
-
-    #avaliação do critério de parada ou repetição do processo
-    parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
-
-    # Salvando melhor indivíduo
-    historico_melhor_dist.append(melhor_distancia)
-        
-    #estabelecimento da nova população
-    lista_caminhos = nova_lista_caminhos.copy()
-
-
-print("\n\nAlgoritmo genético finalizado.\n")
-print(f"Gerações Totais: {len(historico_melhor_dist)}\n")
-print(f"Melhor distância encontrada: {melhor_distancia}\n")
-
-print("Iniciando o algoritmo genético para 1379 cidades...")
-
-inicializacao = Inicializacao('src/nrw1379.txt')
-
-# inicialização com a criação da população inicial, caminhos iniciais e distâncias
-inicializacao.parte_1()
-    
-# Geração inicial
-lista_caminhos = inicializacao.lista_caminhos.copy()
-
-while parada == False:
-
-    # Nova geração
-    nova_lista_caminhos = []
-        
-    # cálculo da fitness de cada caminho
-    for caminho in lista_caminhos:
-        src.genetico.calcula_fitness(caminho)
-
-    #elitismo
-    melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
-    nova_lista_caminhos.append(melhor_individuo_atual)
-
-    # seleção e envio para crossover, mutação ou reprodução
-    while len(nova_lista_caminhos) < 100:
-        operacao = src.genetico.escolha_operacao()
-
-
-        if operacao == Operacao.CROSSOVER:
-            individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
-            individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
-
-            nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
-                
-        elif operacao == Operacao.REPRODUCAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
-
-            nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
-                
-        elif operacao == Operacao.MUTACAO:
-            individuo = src.genetico.selecao_roleta(lista_caminhos)
-                
-            nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
-
-    #avaliação do critério de parada ou repetição do processo
-    parada, melhor_distancia, count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, melhor_distancia, count_geracoes_sem_melhora)
-
-    # Salvando melhor indivíduo
-    historico_melhor_dist.append(melhor_distancia)
-        
-    #estabelecimento da nova população
-    lista_caminhos = nova_lista_caminhos.copy()
-
-
-print("\n\nAlgoritmo genético finalizado.\n")
-print(f"Gerações Totais: {len(historico_melhor_dist)}\n")
-print(f"Melhor distância encontrada: {melhor_distancia}\n")
+        print(f"\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {tempo:.4f}.\n")
+        print(f"Gerações Totais: {len(self.historico_melhor_dist)}\n")
+        print(f"Melhor distância encontrada: {melhor_distancia}\n")
