@@ -20,7 +20,6 @@ def calcula_fitness(individuo):
 
     return fitness
 
-
 def escolha_operacao():
     # Escolhe a operacao a ser realizada com base nas probabilidades definidas
 
@@ -32,7 +31,6 @@ def escolha_operacao():
         return Operacao.REPRODUCAO
     else:
         return Operacao.MUTACAO
-
 
 def selecao_roleta(populacao):
     # Realiza a selecao por roleta
@@ -71,6 +69,15 @@ def criarIndividuo(individuo, inicializacao):
     #print(f"Fitness do novo individuo: {novoIndividuo.fitness}\n")
 
     return novoIndividuo
+    
+def selecao_torneio(populacao):
+    i1 = random.choice(populacao)
+    i2 = random.choice(populacao)
+    
+    if i1.fitness > i2.fitness:
+        return i1
+    else:
+        return i2
     
 
 def crossover(individuo1, individuo2, inicializacao):

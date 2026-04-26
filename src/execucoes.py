@@ -43,8 +43,11 @@ class Execucoes:
                 src.genetico.calcula_fitness(caminho)
 
             #elitismo
-            melhor_individuo_atual = src.genetico.captura_melhor_individuo(lista_caminhos)
-            nova_lista_caminhos.append(melhor_individuo_atual)
+            populacao_ordenada = sorted(lista_caminhos, key=lambda x: x.distancia_total)
+
+            for i in range(5):
+                elite = populacao_ordenada[i]
+                nova_lista_caminhos.append(src.genetico.reproducao(elite, inicializacao))
 
             # seleção e envio para crossover, mutação ou reprodução
             while len(nova_lista_caminhos) < 100:
@@ -52,29 +55,29 @@ class Execucoes:
 
 
                 if operacao == Operacao.CROSSOVER:
-                    individuo_1 = src.genetico.selecao_roleta(lista_caminhos)
-                    individuo_2 = src.genetico.selecao_roleta(lista_caminhos)
+                    individuo_1 = src.genetico.selecao_torneio(lista_caminhos)
+                    individuo_2 = src.genetico.selecao_torneio(lista_caminhos)
 
                     nova_lista_caminhos.append(src.genetico.crossover(individuo_1, individuo_2, inicializacao))
                         
                 elif operacao == Operacao.REPRODUCAO:
-                    individuo = src.genetico.selecao_roleta(lista_caminhos)
+                    individuo = src.genetico.selecao_torneio(lista_caminhos)
 
                     nova_lista_caminhos.append(src.genetico.reproducao(individuo, inicializacao))
                         
                 elif operacao == Operacao.MUTACAO:
-                    individuo = src.genetico.selecao_roleta(lista_caminhos)
+                    individuo = src.genetico.selecao_torneio(lista_caminhos)
                         
                     nova_lista_caminhos.append(src.genetico.mutacao_inversao(individuo, inicializacao))
 
             #avaliação do critério de parada ou repetição do processo
-            self.parada, melhor_distancia, self.count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, self.melhor_distancia, self.count_geracoes_sem_melhora)
+            self.parada, self.melhor_distancia, self.count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, self.melhor_distancia, self.count_geracoes_sem_melhora)
 
-            if geracao_atual > 10000:
-                self.parada = True
+            #if geracao_atual > 10000:
+            #    self.parada = True
 
             # Salvando melhor indivíduo
-            self.historico_melhor_dist.append(melhor_distancia)
+            self.historico_melhor_dist.append(self.melhor_distancia)
                 
             #estabelecimento da nova população
             lista_caminhos = nova_lista_caminhos.copy()
@@ -85,4 +88,4 @@ class Execucoes:
 
         print(f"\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {tempo:.4f}.\n")
         print(f"Gerações Totais: {len(self.historico_melhor_dist)}\n")
-        print(f"Melhor distância encontrada: {melhor_distancia}\n")
+        print(f"Melhor distância encontrada: {self.melhor_distancia}\n")

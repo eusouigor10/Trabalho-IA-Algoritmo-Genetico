@@ -13,11 +13,11 @@ historico_melhor_dist = []
 parada = False
 
 if __name__ == "__main__":
-    #execucao_51 = Execucoes('src/eil51.txt')
-    #execucao_51.execucao()
+    execucao_51 = Execucoes('src/eil51.txt')
+    execucao_51.execucao()
 
-    #execucao_101 = Execucoes('src/eil101.txt')
-    #execucao_101.execucao()
+    execucao_101 = Execucoes('src/eil101.txt')
+    execucao_101.execucao()
 
     execucao_200 = Execucoes('src/kroB200.txt')
     execucao_200.execucao()
