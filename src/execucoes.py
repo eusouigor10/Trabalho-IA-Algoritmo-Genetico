@@ -13,6 +13,7 @@ class Execucoes:
         self.historico_melhor_dist = []
         # TODO Historico de fitness
         self.parada = False
+        self.tempo = 0
 
     def execucao(self):
         inicio = time.perf_counter()
@@ -84,8 +85,8 @@ class Execucoes:
 
         fim = time.perf_counter()
 
-        tempo = fim - inicio
+        self.tempo = fim - inicio
 
-        print(f"\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {tempo:.4f}.\n")
+        print(f"\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {self.tempo:.4f}.\n")
         print(f"Gerações Totais: {len(self.historico_melhor_dist)}\n")
         print(f"Melhor distância encontrada: {self.melhor_distancia}\n")
