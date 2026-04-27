@@ -2,8 +2,6 @@
 
 import matplotlib.pyplot as plt
 
-import matplotlib.pyplot as plt
-
 def plotar_evolucao(valores, titulo="Evolução", ylabel="Valor"):
     plt.figure(figsize=(8, 5))
     
