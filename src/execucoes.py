@@ -14,8 +14,9 @@ class Execucoes:
         # TODO Historico de fitness
         self.parada = False
         self.tempo = 0
+        self.tam_cidades = 0
 
-    def execucao(self):
+    def execucao(self, limite_gen=0):
         inicio = time.perf_counter()
 
         inicializacao = Inicializacao(self.arquivo)
@@ -23,7 +24,9 @@ class Execucoes:
         # inicialização com a criação da população inicial, caminhos iniciais e distâncias
         inicializacao.parte_1()
 
-        print(f"Iniciando o algoritmo genético para {len(inicializacao.cidades)} cidades...")
+        self.tam_cidades = len(inicializacao.cidades)
+
+        print(f"Iniciando o algoritmo genético para {self.tam_cidades} cidades...")
             
         # Geração inicial
         lista_caminhos = inicializacao.lista_caminhos.copy()
@@ -74,11 +77,12 @@ class Execucoes:
             #avaliação do critério de parada ou repetição do processo
             self.parada, self.melhor_distancia, self.count_geracoes_sem_melhora = src.genetico.criterio_parada(nova_lista_caminhos, self.melhor_distancia, self.count_geracoes_sem_melhora)
 
-            #if geracao_atual > 10000:
-            #    self.parada = True
-
             # Salvando melhor indivíduo
             self.historico_melhor_dist.append(self.melhor_distancia)
+
+            # Criterio de parada 2
+            if limite_gen != 0:
+                self.parada = len(self.historico_melhor_dist) > limite_gen
                 
             #estabelecimento da nova população
             lista_caminhos = nova_lista_caminhos.copy()
@@ -87,6 +91,6 @@ class Execucoes:
 
         self.tempo = fim - inicio
 
-        print(f"\n\nAlgoritmo genético finalizado para 51 cidades com tempo de {self.tempo:.4f}.\n")
+        print(f"\n\nAlgoritmo genético finalizado para {self.tam_cidades} cidades com tempo de {self.tempo:.4f}.\n")
         print(f"Gerações Totais: {len(self.historico_melhor_dist)}\n")
         print(f"Melhor distância encontrada: {self.melhor_distancia}\n")
