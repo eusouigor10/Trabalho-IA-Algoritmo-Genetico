@@ -44,7 +44,7 @@ if __name__ == "__main__":
     print("\n----------\n")
 
     execucao_150 = Execucoes('src/ch150.txt')
-    execucao_150.execucao(limite_geracoes) # TODO
+    execucao_150.execucao(limite_geracoes)
 
     src.grafico.plotar_evolucao(execucao_150.historico_melhor_dist, "Evolução das melhores distâncias - cidade 150", "Distância")
 
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     print("\n----------\n")
 
     execucao_200 = Execucoes('src/kroB200.txt')
-    execucao_200.execucao(limite_geracoes) # TODO
+    execucao_200.execucao(limite_geracoes)
 
     src.grafico.plotar_evolucao(execucao_200.historico_melhor_dist, "Evolução das melhores distâncias - cidade 200", "Distância")
 

@@ -11,7 +11,6 @@ class Execucoes:
         self.melhor_distancia = None # * Numero
         self.count_geracoes_sem_melhora = 0
         self.historico_melhor_dist = []
-        # TODO Historico de fitness
         self.parada = False
         self.tempo = 0
         self.tam_cidades = 0
