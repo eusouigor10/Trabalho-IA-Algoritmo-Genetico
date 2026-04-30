@@ -2,6 +2,13 @@
 from src.cidade import Cidade
 from src.caminho import Caminho
 import random
+import sys
+import os
+
+def caminho_recurso(rel_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, rel_path)
+    return os.path.join(os.path.abspath("."), rel_path)
 
 class Inicializacao:
 
@@ -21,7 +28,9 @@ class Inicializacao:
 
     # criar o grafo  
     def criacao_grafo(self):
-        with open(self.arquivo, 'r', encoding='utf-8') as arquivo:
+        caminho = caminho_recurso(self.arquivo)
+
+        with open(caminho, 'r', encoding='utf-8') as arquivo:
             while True:
                 linha = arquivo.readline() # lê linha por linha
 
