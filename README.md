@@ -1,4 +1,8 @@
 # Instância algoritmo genético
+Link do módulo "release" para baixar o zip do arquivo ou o executável: https://github.com/eusouigor10/Trabalho-IA-Algoritmo-Genetico/releases/tag/v1.
+Para executar, basta baixar o arquivo .exe ou extrai-lo do arquivo .zip e rodá-lo. A cada gráfico gerado, a continuação do algoritmo só continua após o fechamento da janela do gráfico.
+
+## Introdução
 Esta é uma implementação de um Algoritmo Genético voltado para a resolução do Problema do Caixeiro Viajante, buscando encontrar rotas otimizadas para visitar um conjunto de pontos e retornar à origem. Trata-se de uma instância não perfeita do algoritmo, o que significa que, embora não garanta encontrar o ótimo global absoluto em todas as execuções, ele apresenta resultados consistentemente próximos do resultado ideal. O sistema mantém uma população estável de 100 indivíduos ao longo das gerações, garantindo uma base genética constante para a evolução das rotas.
 
 ## Seleção e elitismo
